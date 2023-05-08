@@ -52,6 +52,5 @@ func ConnectToMongoDb(ctx context.Context, user, pass, host, database string, po
 // uri generates uri string for connecting to MongoDB.
 func uri(user, pass, host, database string, port int) string {
 	const format = "mongodb://%s:%s@%s:%d/%s"
-	bla := fmt.Sprintf(format, user, pass, host, port, database)
-	return bla
+	return fmt.Sprintf(format, user, pass, host, port, database)
 }
