@@ -1,6 +1,7 @@
 SHELL = /bin/bash
 
 DOCKER_MONGODB=docker exec -it mongodb-sample mongosh -u $(ADMIN_USER) -p $(ADMIN_PASSWORD) --authenticationDatabase admin
+DOCKER_MONGODB_WITH_CUSTOM_CREDS=docker exec -it mongodb-sample mongosh -u $(DB_USER) -p $(DB_PASS) --authenticationDatabase $(DB_NAME)
 
 .PHONY: help
 ## help: shows this help message
@@ -9,7 +10,7 @@ help:
 	@ sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
 .PHONY: setup-db
-## sets up MongoDB
+## setup-db: sets up MongoDB
 setup-db: export ADMIN_USER=admin
 setup-db: export ADMIN_PASSWORD=f3MdBEcz
 setup-db:
@@ -21,6 +22,13 @@ setup-db:
 	done
 	@ echo "... MongoDB is up and running!"
 
+.PHONY: mongodb-console
+## mongodb-console: opens MongoDB console
+mongodb-console: export DB_USER=some_user
+mongodb-console: export DB_PASS=random_pass
+mongodb-console: export DB_NAME=sample_db
+mongodb-console:
+	@ ${DOCKER_MONGODB_WITH_CUSTOM_CREDS}
 
 .PHONY: run
 ## run: runs the application
